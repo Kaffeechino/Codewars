@@ -64,9 +64,4 @@ public class Dictionary {
         }
         return sameChars;
     }
-
-    public static void main(String[] args) {
-        // Demonstration:
-
-    }
 }
