@@ -1,13 +1,15 @@
 package de.gfn;
-
+// Square into Squares. Protect trees!
+// https://www.codewars.com/kata/54eb33e5bc1a25440d000891
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-// If no valid solution exists return null
 public class Decompose {
-    int i = 1;
-    ArrayList<Long> decompList = new ArrayList<>();
+    String result;
+    long original;
+    ArrayList<Long> list = new ArrayList<>();
+
 
     String listToStr(ArrayList<Long> list) {
         if (list.isEmpty()) return null;
@@ -22,26 +24,41 @@ public class Decompose {
         }
     }
 
-    long restPlace() {
-        long wholeSpace = decompList.get(0)*decompList.get(0);
-        long takenSpace = 0;
-        for (int i = 1; i < decompList.size(); i++) {
-            takenSpace += decompList.get(i) * decompList.get(i);
+    long listSum(ArrayList<Long> list) {
+        long sum = 0;
+        for (long num : list) {
+            sum += num*num;
         }
-        return wholeSpace-takenSpace;
+        return sum;
+    }
+    long rest() {
+        long rest = original*original - listSum(list);
+        return rest;
     }
 
     public String decompose(long n) {
-        decompList.add(n);
-        long maxN = Math.min(n - 1, (long) Math.sqrt(restPlace()));
-        if (n > 1 && maxN > 0)
-            decompose(maxN);
-        else if (restPlace() != 0 && i < decompList.get(0)) {
-            decompose(decompList.get(0) - i++);
-            decompList.clear();
+        if (result!=null) return result;
+        original = Math.max(n, original);
+        long ceiling = Math.min(n-1, (long)Math.sqrt(rest()));
+        long floor = (long) Math.sqrt(rest()/2.0);
+        for (long i = ceiling; i > floor; i--) {
+            list.add(i);
+            if (listSum(list) == original*original){
+                result = listToStr(list);
+                break;
+            } else {
+                if (i == 1) {
+                    if(!list.isEmpty()) {
+                        list.remove(list.size()-1);
+                    }
+                    return null;
+                }
+                if (i>1) decompose(i);
+            }
         }
-        else if (restPlace() == 0) decompList.remove(0);
-        else return null;
-        return listToStr(decompList);
+        if(!list.isEmpty()) {
+            list.remove(list.size()-1);
+        }
+        return result;
     }
 }

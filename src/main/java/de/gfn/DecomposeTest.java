@@ -10,7 +10,7 @@ public class DecomposeTest {
     @Test
     public void test1() {
         Decompose d = new Decompose();
-        long n = 11;
-        assertEquals("1 2 4 10",  d.decompose(n));
+        long n = 123456;
+        assertEquals("2 6 157 12344",  d.decompose(n));
     }
 }
